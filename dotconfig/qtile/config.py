@@ -81,14 +81,20 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "b", lazy.spawn("brave-browser")),
+    Key([mod], "f", lazy.spawn("flatpak run io.freetubeapp.FreeTube &")),
+    #Key([mod, "shift"], "s", lazy.spawn("flameshot gui &")),
     #sound
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
     Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute")),
     Key([mod], "p", lazy.spawn("rofi -show drun")),
     #brightness
-    #Key([], "XF86MonBrightnessUp"
-    #Key([], "XF86MonBrightnessDown"
+    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +10%")),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 10%-")),
+    #Mouse clicks
+    Key([mod, "shift"], "o", lazy.spawn("xdotool click 1")),
+    Key([mod, "shift"], "p", lazy.spawn("xdotool click 3")),
 ]
 
 groups = [Group(i) for i in "12345"]
@@ -127,7 +133,7 @@ layouts = [
     layout.MonadTall(
 		border_focus='81A1C1',
 		single_border_width=None,
-		margin=24,
+		margin=15,
 		border_normal='4c566a'
     ),
     layout.Floating(
@@ -173,7 +179,7 @@ screens = [
 			highlight_method='line',
 			active="d8dee9",
 			block_highlight_text_color='eceff4',
-			inactive='4c566a',
+			inactive='88c0d0',
 			highlight_color=['81a1c1','5e81ac'],
 			this_current_screen_border='4c566a'
 		),
@@ -189,25 +195,24 @@ screens = [
 			max_chars=50),
                 #
                 widget.Image(
-			filename='~/.config/qtile/bar_icons/separator2.png',
+			filename='~/.config/qtile/bar_icons/separator.png',
 			background=colours[0]
 		),
 		#
 		widget.Clock(
 			format="%d-%m-%Y %a %H:%M",
 			foreground=colours[1],
-			background=colours[5],
+			background=colours[4],
 			fontsize=15,
 			font='mono'
 		),
 		#
                 widget.Image(
-			filename='~/.config/qtile/bar_icons/separator2reverse.png',
+			filename='~/.config/qtile/bar_icons/separatorreverse.png',
 			background=colours[0]
 		),
 		#
-		widget.Sep(
-			padding=240,
+		widget.Spacer(
 			background=colours[0],
 			foreground=colours[0]
 		),
@@ -229,13 +234,15 @@ screens = [
 		#
 		widget.Image(
 			filename='~/.config/qtile/bar_icons/cpu.png',
-			background=colours[4]
+			background=colours[4],
+			mouse_callbacks={'Button1':lambda:qtile.cmd_spawn('alacritty -e cmatrix -B -C cyan')}
 		),
 		#
 		widget.CPU(
 			background=colours[4],
 			foreground=colours[1],
-			format='{load_percent}%'
+			format='{load_percent}%',
+			mouse_callbacks={'Button1':lambda:qtile.cmd_spawn('alacritty -e cmatrix -B -C cyan')}
 		),
 		#
                 widget.Image(
@@ -244,17 +251,17 @@ screens = [
 		),
 		#
 		widget.Image(
-			filename='~/.config/qtile/bar_icons/ram.png',
+			filename='~/.config/qtile/bar_icons/ram2.png',
 			background=colours[5],
 			padding=0,
-			mouse_callbacks={'Button1':lambda:qtile.cmd_spawn('alacritty -e top')}
+			mouse_callbacks={'Button1':lambda:qtile.cmd_spawn('alacritty -e htop')}
 		),
 		#
 		widget.Memory(
 			background=colours[5],
 			foreground=colours[1],
 			measure_mem='M',
-			mouse_callbacks={'Button1':lambda:qtile.cmd_spawn('alacritty -e top')}
+			mouse_callbacks={'Button1':lambda:qtile.cmd_spawn('alacritty -e htop')}
 		),
 		#
                 widget.Image(
@@ -269,7 +276,8 @@ screens = [
 		#
 		widget.ThermalSensor(
 			background=colours[4],
-			foreground=colours[1]
+			foreground=colours[1],
+			tag_sensor="Core 0"
 		),
 		#
                 widget.Image(
@@ -301,15 +309,26 @@ screens = [
 		),
 		#
 		widget.Battery(
-			format='{percent:2.0%} {hour:d}:{min:02d}',
+			format='{percent:2.0%} {hour:d}:{min:02d}', #  {watt:.1f}W',
 			foreground=colours[1],
 			background=colours[4]
 		),
 		#
-		widget.Sep(
+                widget.Image(
+			filename='~/.config/qtile/bar_icons/separator2.png',
 			background=colours[4],
-			foreground=colours[4],
-			padding=6
+			padding=0
+		),
+		#
+		widget.Image(
+			background=colours[5],
+			foreground=colours[1],
+			padding_x=0,
+			filename='~/.config/qtile/bar_icons/power.png',
+			mouse_callbacks={
+				'Button1':lazy.shutdown(),
+				'Button3':lambda:qtile.cmd_spawn('alacritty -e shutdown now')
+			}
 		)
             ],
             24,
