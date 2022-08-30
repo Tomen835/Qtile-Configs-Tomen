@@ -89,9 +89,11 @@ keys = [
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
     Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute")),
     Key([mod], "p", lazy.spawn("rofi -show drun")),
+    Key([mod], "z", lazy.spawn("slock")),
     #brightness
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +10%")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 10%-")),
+    Key([mod, "shift"], "a", lazy.spawn("brightnessctl s 1%")),
     #Mouse clicks
     Key([mod, "shift"], "o", lazy.spawn("xdotool click 1")),
     Key([mod, "shift"], "p", lazy.spawn("xdotool click 3")),
@@ -180,7 +182,7 @@ screens = [
 			active="d8dee9",
 			block_highlight_text_color='eceff4',
 			inactive='88c0d0',
-			highlight_color=['81a1c1','5e81ac'],
+			highlight_color=['81a1c1','81a1c1','5e81ac'],
 			this_current_screen_border='4c566a'
 		),
 		#
@@ -327,15 +329,17 @@ screens = [
 			filename='~/.config/qtile/bar_icons/power.png',
 			mouse_callbacks={
 				'Button1':lazy.shutdown(),
-				'Button3':lambda:qtile.cmd_spawn('alacritty -e shutdown now')
+				'Button3':lambda:qtile.cmd_spawn('shutdown now')
 			}
 		)
             ],
-            24,
+            26,
             border_width=[3, 2, 5, 2],  # Draw borders
-            border_color=[colours[3], colours[2], colours[2], colours[3]]
+            border_color=[colours[3], colours[2], colours[0], colours[3]],
+	    margin=[4,4,0,4],
+	    #opacity=0.9
         ),
-	wallpaper='~/.config/qtile/zeldalinks2.png',
+	wallpaper='~/.config/qtile/ocarina2.jpg',
 	wallpaper_mode='fill'
     ),
 ]
@@ -384,4 +388,3 @@ wl_input_rules = None
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "qtile"
-
