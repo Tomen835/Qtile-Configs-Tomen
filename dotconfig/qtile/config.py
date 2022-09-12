@@ -94,9 +94,6 @@ keys = [
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +10%")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 10%-")),
     Key([mod, "shift"], "a", lazy.spawn("brightnessctl s 1%")),
-    #Mouse clicks
-    Key([mod, "shift"], "o", lazy.spawn("xdotool click 1")),
-    Key([mod, "shift"], "p", lazy.spawn("xdotool click 3")),
 ]
 
 groups = [Group(i) for i in "12345"]
