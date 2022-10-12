@@ -81,7 +81,7 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    Key([mod], "b", lazy.spawn("brave-browser")),
+    Key([mod], "b", lazy.spawn("firefox")),
     Key([mod], "f", lazy.spawn("flatpak run io.freetubeapp.FreeTube &")),
     #Key([mod, "shift"], "s", lazy.spawn("flameshot gui &")),
     #sound
@@ -94,6 +94,8 @@ keys = [
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl s +10%")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl s 10%-")),
     Key([mod, "shift"], "a", lazy.spawn("brightnessctl s 1%")),
+    Key([mod, "control"], "n", lazy.spawn("xdotool click 1")),
+    Key([mod, "control"], "m", lazy.spawn("xdotool click 1"))
 ]
 
 groups = [Group(i) for i in "12345"]
@@ -203,7 +205,8 @@ screens = [
 			foreground=colours[1],
 			background=colours[4],
 			fontsize=15,
-			font='mono'
+			font='mono',
+			mouse_callbacks={'Button1':lambda:qtile.cmd_spawn('gnome-clocks')}
 		),
 		#
                 widget.Image(
@@ -215,8 +218,8 @@ screens = [
 			background=colours[0],
 			foreground=colours[0]
 		),
-		#
-                widget.Image(
+        #
+        widget.Image(
 			filename='~/.config/qtile/bar_icons/separator2.png',
 			background=colours[0]
 		),
@@ -226,7 +229,14 @@ screens = [
 			background=colours[5],
 			icon_size=16),
 		#
-                widget.Image(
+        widget.CheckUpdates(
+            display_format='U: {updates}',
+            distro='Fedora',
+            background=colours[5],
+            foreground=colours[1]
+        ),
+        #
+        widget.Image(
 			filename='~/.config/qtile/bar_icons/separator.png',
 			background=colours[5]
 		),
